@@ -1,33 +1,26 @@
 // Firebase Configuration
-// IM   PORTANT: Replace these with your actual Firebase project credentials
 const firebaseConfig = {
-  apiKey: "AIzaSyA_Rcqh0iNCwkG8DnDaUufj-un6GKbB2SE",
+    apiKey: "AIzaSyA_Rcqh0iNCwkG8DnDaUufj-un6GKbB2SE",
     authDomain: "donedelivery-9770f.firebaseapp.com",
     projectId: "donedelivery-9770f",
     storageBucket: "donedelivery-9770f.firebasestorage.app",
     messagingSenderId: "821373082835",
     appId: "1:821373082835:web:15a3cd858dc25b3fd78826",
     measurementId: "G-PQN5HRM08T"
-  };
+};
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
-// Initialize Firebase services
 const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-// Paystack Configuration
-const PAYSTACK_PUBLIC_KEY = "pk_test_c57874d79609a9b27af019c27b59247e1b6d42d4"; // Replace with your Paystack public key
+// Enable persistence for offline support
+db.enablePersistence()
+    .catch(err => console.log('Persistence error:', err));
 
-// WhatsApp Configuration
-const WHATSAPP_NUMBER = "27810606488"; // Business WhatsApp number
-const WHATSAPP_API_URL = "YOUR_WHATSAPP_API_ENDPOINT"; // Your WhatsApp Business API endpoint
-
-// Google Sheets Configuration (for permanent storage)
-const GOOGLE_SHEETS_API_KEY = "YOUR_GOOGLE_SHEETS_API_KEY";
-const SPREADSHEET_ID = "YOUR_SPREADSHEET_ID";
+// Paystack Configuration (this is public key - safe for frontend)
+const PAYSTACK_PUBLIC_KEY = "pk_test_c57874d79609a9b27af019c27b59247e1b6d42d4";
 
 // Business Configuration
 const BUSINESS_CONFIG = {
@@ -40,7 +33,7 @@ const BUSINESS_CONFIG = {
     businessAddress: "Makhado, Limpopo, South Africa"
 };
 
-// Status definitions
+// Status definitions - CRITICAL: Match these exactly in your HTML data-status attributes
 const PARCEL_STATUS = {
     PENDING: 'pending',
     PICKED_UP: 'picked-up',
@@ -48,9 +41,14 @@ const PARCEL_STATUS = {
     DELIVERED: 'delivered'
 };
 
+// IMPORTANT: Deploy your Cloud Function first, then update this URL
+// For now, we'll make it optional so the app doesn't break
+const CLOUD_FUNCTION_URL = null; // Set to actual URL after deployment
+
+// Helper functions...
 // Helper function to generate tracking number
 function generateTrackingNumber() {
-    const prefix = 'DN';
+    const prefix = 'DN';    
     const timestamp = Date.now().toString().slice(-8);
     const random = Math.random().toString(36).substring(2, 6).toUpperCase();
     return `${prefix}${timestamp}${random}`;
@@ -87,6 +85,7 @@ if (typeof module !== 'undefined' && module.exports) {
         storage,
         PAYSTACK_PUBLIC_KEY,
         WHATSAPP_NUMBER,
+        CLOUD_FUNCTION_URL, 
         WHATSAPP_API_URL,
         BUSINESS_CONFIG,
         PARCEL_STATUS,
