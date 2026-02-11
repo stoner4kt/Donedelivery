@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard - Done Delivery</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .driver-dashboard {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        .driver-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #c10511 100%);
+            color: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .driver-header h2 {
+            margin-bottom: 10px;
+        }
+
+        .driver-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-box p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: var(--white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .parcel-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .parcel-item {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .parcel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .parcel-header h4 {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .parcel-details {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .parcel-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .parcel-actions button {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .image-upload {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .scan-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .scan-button:active {
+            transform: scale(0.95);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .logout-btn-mobile {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="driver-dashboard">
+        <div class="driver-header">
+            <h2>Driver Dashboard</h2>
+            <p id="driverName">Loading...</p>
+            <div class="driver-stats">
+                <div class="stat-box">
+                    <h3 id="todayPickups">0</h3>
+                    <p>Pickups</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="inTransit">0</h3>
+                    <p>In Transit</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="todayDeliveries">0</h3>
+                    <p>Delivered</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-status="pending">Pending Pickup</button>
+            <button class="tab" data-status="picked-up">Picked Up</button>
+            <button class="tab" data-status="in-transit">In Transit</button>
+            <button class="tab" data-status="delivered">Delivered</button>
+        </div>
+
+        <div id="parcelList" class="parcel-list">
+            <!-- Parcels will be loaded here -->
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-box-open"></i>
+            <h3>No parcels found</h3>
+            <p>No parcels in this status</p>
+        </div>
+
+        <button class="scan-button" id="scanButton" title="Scan Barcode">
+            <i class="fas fa-qrcode"></i>
+        </button>
+
+        <button class="btn btn-danger btn-block logout-btn-mobile" id="logoutBtnMobile">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+
+    <!-- Scanner Modal -->
+    <div id="scannerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Scan Barcode</h2>
+            <div id="scanner-container" style="width: 100%; max-width: 400px; margin: 20px auto;"></div>
+            <p style="text-align: center; color: var(--text-light); margin-top: 20px;">
+                Or enter tracking number manually:
+            </p>
+            <input type="text" id="manualTrackingInput" placeholder="Enter tracking number" style="width: 100%; padding: 12px; margin-top: 10px;">
+            <button class="btn btn-primary btn-block" id="manualSearchBtn" style="margin-top: 15px;">Search</button>
+        </div>
+    </div>
+
+    <!-- Parcel Action Modal -->
+    <div id="actionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="actionModalTitle">Update Parcel</h2>
+            <div id="actionModalContent"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="driver.js"></script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Done Delivery - Fast & Reliable Courier Service</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Done Delivery" onerror="this.style.display='none'">
+                <span class="logo-text">done<span class="delivery">DELIVERY</span></span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#track">Track</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact">Contact</a>
+                <button class="btn btn-primary" id="loginBtn">Login</button>
+                <button class="btn btn-secondary" id="userAccountBtn" style="display: none;">
+                    <i class="fas fa-user"></i> <span id="userNameDisplay"></span>
+                </button>
+                <button class="btn btn-danger" id="logoutBtn" style="display: none;">Logout</button>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Same-Day Delivery <span class="highlight">Done Right</span></h1>
+                <p class="hero-subtitle">Fast, safe, and hassle-free courier services in Venda. Your packages delivered within 24 hours.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large" id="shipNowBtn">Ship Now</button>
+                    <button class="btn btn-outline btn-large" onclick="document.getElementById('track').scrollIntoView({behavior: 'smooth'})">Track Package</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <h3>24hrs</h3>
+                        <p>Delivery Time</p>
+                    </div>
+                    <div class="stat">
+                        <h3>100%</h3>
+                        <p>Insured</p>
+                    </div>
+                    <div class="stat">
+                        <h3>24/7</h3>
+                        <p>Support</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="assets/Frame.png" alt="Delivery Van" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23E30613%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22%3EDelivery Van%3C/text%3E%3C/svg%3E'">
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="services">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three simple steps to get your package delivered</p>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h3>Day 1 (0-5 hrs)</h3>
+                    <p>We pick up from your door in Venda</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Day 1 (5-7 hrs)</h3>
+                    <p>Your package is sorted and manifested via our Express Road network</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Day 1 (7-24 hrs)</h3>
+                    <p>Delivery to your customer's doorstep in all Townships, Villages and Towns</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose Done Delivery?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Fully Insured & Vetted Drivers</h3>
+                    <p>All our drivers are thoroughly vetted and insured for your peace of mind</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Real-Time Tracking Updates</h3>
+                    <p>Track your package every step of the way via WhatsApp, SMS, or email</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-door-open"></i>
+                    <h3>Reliable Door-to-Door Service</h3>
+                    <p>We ensure safe delivery from pickup to final destination</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>24/7 Customer Support</h3>
+                    <p>Our WhatsApp bot and support team are always available</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Track Package -->
+    <section class="track-section" id="track">
+        <div class="container">
+            <h2 class="section-title">Track Your Package</h2>
+            <p class="section-subtitle">Enter your tracking number to see where your package is</p>
+            <div class="track-form">
+                <input type="text" id="trackingInput" placeholder="Enter tracking number (e.g., DN12345678)">
+                <button class="btn btn-primary" id="trackBtn">Track Now</button>
+            </div>
+            <div id="trackingResult" class="tracking-result" style="display: none;"></div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Simple Pricing</h2>
+            <p class="section-subtitle">R80 per kilometer - No hidden fees</p>
+            <div class="pricing-card">
+                <h3>Standard Delivery</h3>
+                <div class="price">
+                    <span class="currency">R</span>
+                    <span class="amount">80</span>
+                    <span class="period">/km</span>
+                </div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Same-day delivery (within 24 hours)</li>
+                    <li><i class="fas fa-check"></i> Real-time tracking</li>
+                    <li><i class="fas fa-check"></i> Fully insured</li>
+                    <li><i class="fas fa-check"></i> WhatsApp notifications</li>
+                    <li><i class="fas fa-check"></i> Proof of delivery</li>
+                </ul>
+                <button class="btn btn-primary btn-large" id="calculatePriceBtn">Calculate Price</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>081 0606 488</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <p>081 0606 488</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Service Area</h4>
+                            <p>Makhado, Limpopo</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="https://wa.me/27810606488" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Done Delivery. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Welcome Back</h2>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+            
+            <div id="loginForm" class="auth-form">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button class="btn btn-primary btn-block" id="loginSubmitBtn">Login</button>
+                <div class="divider">OR</div>
+                <button class="btn btn-google" id="googleLoginBtn">
+                    <i class="fab fa-google"></i> Continue with Google
+                </button>
+            </div>
+
+            <div id="signupForm" class="auth-form" style="display: none;">
+                <input type="text" id="signupFirstName" placeholder="First Name" required>
+                <input type="text" id="signupLastName" placeholder="Last Name" required>
+                <input type="email" id="signupEmail" placeholder="Email" required>
+                <input type="tel" id="signupPhone" placeholder="Phone Number" required>
+                <input type="tel" id="signupWhatsApp" placeholder="WhatsApp Number" required>
+                <input type="password" id="signupPassword" placeholder="Password" required>
+                <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+                <button class="btn btn-primary btn-block" id="signupSubmitBtn">Create Account</button>
+                <div class="divider">OR</div>
+                <button class="btn btn-google" id="googleSignupBtn">
+                    <i class="fab fa-google"></i> Sign up with Google
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Parcel Modal -->
+    <div id="parcelModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close">&times;</span>
+            <h2>Create New Shipment</h2>
+            <form id="parcelForm" class="parcel-form">
+                <!-- Sender Information -->
+                <div class="form-section">
+                    <h3>Sender Information</h3>
+                    <div class="form-row">
+                        <input type="text" id="senderName" placeholder="Full Name" required>
+                        <input type="tel" id="senderPhone" placeholder="Phone Number" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" id="senderEmail" placeholder="Email" required>
+                        <input type="tel" id="senderWhatsApp" placeholder="WhatsApp Number" required>
+                    </div>
+                    <textarea id="senderAddress" placeholder="Pickup Address in Makhado" rows="3" required></textarea>
+                </div>
+
+                <!-- Receiver Information -->
+                <div class="form-section">
+                    <h3>Receiver Information</h3>
+                    <div class="form-row">
+                        <input type="text" id="receiverName" placeholder="Full Name" required>
+                        <input type="tel" id="receiverPhone" placeholder="Phone Number" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" id="receiverEmail" placeholder="Email" required>
+                        <input type="tel" id="receiverWhatsApp" placeholder="WhatsApp Number" required>
+                    </div>
+                    <textarea id="receiverAddress" placeholder="Delivery Address in Makhado" rows="3" required></textarea>
+                </div>
+
+                <!-- Package Information -->
+                <div class="form-section">
+                    <h3>Package Details</h3>
+                    <div class="form-row">
+                        <input type="text" id="packageDescription" placeholder="Package Description" required>
+                        <input type="number" id="packageWeight" placeholder="Weight (kg)" step="0.1" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="number" id="packageValue" placeholder="Declared Value (R)" step="0.01" required>
+                        <input type="number" id="estimatedDistance" placeholder="Estimated Distance (km)" step="0.1" required>
+                    </div>
+                    <div class="price-estimate">
+                        <p>Estimated Price: <span id="priceEstimate">R0.00</span></p>
+                    </div>
+                </div>
+
+                <!-- Legal Confirmation -->
+                <div class="form-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="legalConfirm" required>
+                        <span>I confirm that this package does NOT contain any illegal items, contraband, or prohibited substances. I understand that Done Delivery reserves the right to inspect packages and that any illegal contents will be reported to authorities.</span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelParcelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-large">Proceed to Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2>Complete Payment</h2>
+            <div class="payment-summary">
+                <p>Total Amount: <strong id="paymentAmount">R0.00</strong></p>
+                <p>Distance: <strong id="paymentDistance">0 km</strong></p>
+            </div>
+            <div id="paystackButton"></div>
+            <button class="btn btn-secondary btn-block" id="cancelPaymentBtn">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Shipment Created Successfully!</h2>
+            <p>Your tracking number is: <strong id="successTrackingNumber"></strong></p>
+            <p>Labels have been generated and sent to your email.</p>
+            <div class="form-actions">
+                <button class="btn btn-primary" id="downloadLabelsBtn">Download Labels</button>
+                <button class="btn btn-secondary" id="closeSuccessBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="parcel.js"></script>
+    <script src="tracking.js"></script>
+    <script src="payment.js"></script>
+    <script src="labels.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
