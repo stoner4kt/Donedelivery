@@ -1,7 +1,12 @@
 // Service Worker for Done Delivery
-// Provides offline capabilities and caching
+// Optimized for Spck Editor development and Production reliability
 
-const CACHE_NAME = 'done-delivery-v1.0.0';
+// 1. UPDATE THIS VERSION STRING TO FORCE REFRESHES
+const CACHE_NAME = 'done-delivery-v1.0.1'; 
+
+// 2. TOGGLE THIS TO 'false' IF YOU WANT TO DISABLE CACHING ENTIRELY IN SPCK
+const IS_DEVELOPMENT = false; 
+
 const urlsToCache = [
     '/',
     '/index.html',
@@ -19,28 +24,43 @@ const urlsToCache = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
-// Install event - cache resources
+// Install event - Forces the new service worker to take over immediately
 self.addEventListener('install', event => {
+    self.skipWaiting(); // Forces activation of the new SW
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Opened cache');
+                console.log('Cache version:', CACHE_NAME);
                 return cache.addAll(urlsToCache);
             })
-            .catch(error => {
-                console.error('Cache installation failed:', error);
-            })
+            .catch(error => console.error('Cache failed:', error))
     );
 });
 
-// Fetch event - serve from cache when possible
+// Activate event - Deletes old caches immediately
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                        console.log('Clearing old cache:', cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim()) // Take control of all open tabs
+    );
+});
+
+// Fetch event - NETWORK-FIRST Strategy
 self.addEventListener('fetch', event => {
-    // Skip Chrome extension requests
-    if (event.request.url.startsWith('chrome-extension://')) {
+    // Basic filters
+    if (event.request.url.startsWith('chrome-extension://') || !IS_DEVELOPMENT) {
         return;
     }
 
-    // Skip Firebase requests - always fetch from network
+    // Always fetch dynamic API data from network
     if (event.request.url.includes('firebaseio.com') || 
         event.request.url.includes('googleapis.com') ||
         event.request.url.includes('paystack.co')) {
@@ -48,57 +68,23 @@ self.addEventListener('fetch', event => {
     }
 
     event.respondWith(
-        caches.match(event.request)
+        fetch(event.request)
             .then(response => {
-                // Cache hit - return response
-                if (response) {
-                    return response;
-                }
-
-                // Clone the request
-                const fetchRequest = event.request.clone();
-
-                return fetch(fetchRequest).then(response => {
-                    // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
-                    }
-
-                    // Clone the response
+                // If network is available, update the cache and return the fresh file
+                if (response && response.status === 200 && response.type === 'basic') {
                     const responseToCache = response.clone();
-
-                    caches.open(CACHE_NAME)
-                        .then(cache => {
-                            cache.put(event.request, responseToCache);
-                        });
-
-                    return response;
+                    caches.open(CACHE_NAME).then(cache => {
+                        cache.put(event.request, responseToCache);
+                    });
+                }
+                return response;
+            })
+            .catch(() => {
+                // If network fails (offline), look for it in the cache
+                return caches.match(event.request).then(cachedResponse => {
+                    return cachedResponse || caches.match('/index.html');
                 });
             })
-            .catch(error => {
-                console.error('Fetch failed:', error);
-                
-                // Return offline page if available
-                return caches.match('/index.html');
-            })
-    );
-});
-
-// Activate event - clean up old caches
-self.addEventListener('activate', event => {
-    const cacheWhitelist = [CACHE_NAME];
-    
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
-                        console.log('Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
     );
 });
 
@@ -110,34 +96,23 @@ self.addEventListener('sync', event => {
 });
 
 async function syncParcels() {
-    // Get pending parcels from IndexedDB
-    // Send them to Firebase when online
-    console.log('Syncing parcels...');
+    console.log('Syncing parcels to Firebase...');
 }
 
 // Push notifications
 self.addEventListener('push', event => {
-    const data = event.data.json();
-    
+    const data = event.data ? event.data.json() : { title: 'New Update', body: 'Check your delivery status.' };
     const options = {
         body: data.body,
         icon: '/assets/logo.png',
         badge: '/assets/logo.png',
-        data: {
-            url: data.url || '/'
-        }
+        data: { url: data.url || '/' }
     };
-
-    event.waitUntil(
-        self.registration.showNotification(data.title, options)
-    );
+    event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
 // Notification click
 self.addEventListener('notificationclick', event => {
     event.notification.close();
-    
-    event.waitUntil(
-        clients.openWindow(event.notification.data.url)
-    );
+    event.waitUntil(clients.openWindow(event.notification.data.url));
 });
